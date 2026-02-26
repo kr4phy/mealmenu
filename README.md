@@ -1,6 +1,6 @@
-# Nuxt Minimal Starter
+# Meal Menu viewer
 
-Look at the [Nuxt documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+Check the school meal menu for the desired date.
 
 ## Setup
 
@@ -72,4 +72,4 @@ yarn preview
 bun run preview
 ```
 
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+Check out the Nuxt's [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
