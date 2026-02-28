@@ -8,7 +8,11 @@ import Header from './components/header.vue';
     <UApp>
       <NuxtRouteAnnouncer />
       <Header />
-      <NuxtPage />
+      <UMain>
+        <NuxtLayout>
+          <NuxtPage />
+        </NuxtLayout>
+      </UMain>
     </UApp>
   </div>
 </template>

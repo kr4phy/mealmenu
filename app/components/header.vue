@@ -15,6 +15,11 @@ const items = computed<NavigationMenuItem[]>(() => [
     to: '/mealmenu',
     active: route.path.startsWith('/mealmenu')
   },
+  {
+    label: 'Settings',
+    to: '/settings',
+    active: route.path.startsWith('/settings')
+  }
 ])
 </script>
 
@@ -33,7 +38,7 @@ const items = computed<NavigationMenuItem[]>(() => [
         <UButton
           color="neutral"
           variant="ghost"
-          to="https://github.com/nuxt/ui"
+          to="https://github.com/kr4phy/mealmenu"
           target="_blank"
           icon="i-simple-icons-github"
           aria-label="GitHub"

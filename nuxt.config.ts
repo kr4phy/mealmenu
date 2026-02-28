@@ -9,4 +9,13 @@ export default defineNuxtConfig({
   css: [
     '@/assets/css/main.css'
   ],
+  nitro: {
+    preset: 'bun',
+  },
+  runtimeConfig: {
+    public: {
+      AtptOfcdcScCode: '',
+      SdSchulCode: '',
+    },
+  },
 })
