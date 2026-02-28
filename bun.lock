@@ -12,6 +12,7 @@
         "vue-router": "^4.6.4",
       },
       "devDependencies": {
+        "@iconify-json/lucide": "^1.2.95",
         "@nuxt/eslint": "^1.15.1",
         "eslint": "^10.0.0",
         "typescript": "^5.9.3",
@@ -189,6 +190,8 @@
     "@humanwhocodes/module-importer": ["@humanwhocodes/module-importer@1.0.1", "", {}, "sha512-bxveV4V8v5Yb4ncFTT3rPSgZBOpCkjfK0y4oVVVJwIuDVBRMDXrPyXRL988i5ap9m9bnyEEjWfm5WkBmtffLfA=="],
 
     "@humanwhocodes/retry": ["@humanwhocodes/retry@0.4.3", "", {}, "sha512-bV0Tgo9K4hfPCek+aMAn81RppFKv2ySDQeMoSZuvTASywNTnVJCArCZE2FWqpvIatKu7VMRLWlR1EazvVhDyhQ=="],
+
+    "@iconify-json/lucide": ["@iconify-json/lucide@1.2.95", "", { "dependencies": { "@iconify/types": "*" } }, "sha512-SxDM/NEJtcGGAiLAnaZ7rcmVxkJI8esswTZLCm5BfNcoPf/yawIImb4nNfsu4dtFzP/Cl6KRg+vZq521zOUOnQ=="],
 
     "@iconify/collections": ["@iconify/collections@1.0.654", "", { "dependencies": { "@iconify/types": "2.0.0" } }, "sha512-xpxyDlrndFo7z6tRyybLA8U/fzX5b+EZThqqudjbfDRknLWpjQykefbCZLFvp/XMRJCWk75JN0jFtG1Cw+Dbsw=="],
 
