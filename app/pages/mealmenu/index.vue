@@ -1,25 +1,8 @@
 <script setup lang="ts">
 import { CalendarDate } from '@internationalized/date'
 
-const tabs = [
-    {
-        label: 'Breakfast',
-        icon: '',
-        slot: 'breakfast',
-    },
-    {
-        label: 'Lunch',
-        icon: '',
-        slot: 'lunch',
-    },
-    {
-        label: 'Dinner',
-        icon: '',
-        slot: 'dinner',
-    },
-]
-
 const route = useRoute()
+const router = useRouter()
 const queryDate = route.query.date as string | undefined
 
 const crtDate = new Date()
@@ -32,33 +15,35 @@ if (typeof queryDate === 'string') {
     }
 }
 
-const maxDate = new CalendarDate(dateValue.value.year, dateValue.value.month, dateValue.value.day)
+const maxDate = new CalendarDate(dateValue.value.year + 1, dateValue.value.month, dateValue.value.day)
 
 watch(dateValue, (newDate) => {
     const { year, month, day } = newDate
     const newQuery = `?date=${year}-${month}-${day}`
     if (newQuery !== window.location.search) {
-        window.history.pushState(null, '', newQuery)
+        router.push({ query: { date: `${year}-${month}-${day}` } })
     }
+})
+
+const formattedDate = computed(() => ` ${dateValue.value.year}-${dateValue.value.month.toString().padStart(2, '0')}-${dateValue.value.day.toString().padStart(2, '0')}`)
+const pageTitle = computed(() => `Meal Menu of ${formattedDate.value}`)
+
+useHead({
+    title: pageTitle.value,
 })
 
 </script>
 
 <template>
-    <UContainer>
-        <h1 class='text-2xl font-bold md:text-3xl lg:text-4xl py-8'>Meal Menu of {{ dateValue }}</h1>
-        <UCalendar v-model="dateValue" :max-value="maxDate" />
-        <USeparator class="my-8" />
-        <UTabs :items="tabs">
-            <template #breakfast>
-                <UPageCard title="Breakfast" description="" />
-            </template>
-            <template #lunch>
-                <UPageCard title="Lunch" description="" />
-            </template>
-            <template #dinner>
-                <UPageCard title="Dinner" description="" />
-            </template>
-        </UTabs>
-    </UContainer>
+    <UPage>
+        <UContainer>
+            <UPageHeader :title="pageTitle" />
+            <UPageBody>
+                <UCalendar v-model="dateValue" :max-value="maxDate" />
+                <USeparator class="my-8" />
+                <MealMenuTabs
+                    :date="`${dateValue.year}${dateValue.month.toString().padStart(2, '0')}${dateValue.day.toString().padStart(2, '0')}`" />
+            </UPageBody>
+        </UContainer>
+    </UPage>
 </template>

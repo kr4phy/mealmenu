@@ -17,7 +17,7 @@ type MealInfo = {
     "LOAD_DTM": string
 }
 
-type APIDataSuccess = {
+type MealMenuAPIDataSuccess = {
     "mealServiceDietInfo": [
         {
             "head": [
@@ -38,6 +38,55 @@ type APIDataSuccess = {
     ]
 }
 
+type SchoolInfo = {
+    "ATPT_OFCDC_SC_CODE": string,
+    "ATPT_OFCDC_SC_NM": string,
+    "SD_SCHUL_CODE": string,
+    "SCHUL_NM": string,
+    "ENG_SCHUL_NM": null | string,
+    "SCHUL_KND_SC_NM": string,
+    "LCTN_SC_NM": string,
+    "JU_ORG_NM": string,
+    "FOND_SC_NM": string,
+    "ORG_RDNZC": string,
+    "ORG_RDNMA": string,
+    "ORG_RDNDA": string,
+    "ORG_TELNO": string,
+    "HMPG_ADRES": string,
+    "COEDU_SC_NM": string,
+    "ORG_FAXNO": string,
+    "HS_SC_NM": string,
+    "INDST_SPECL_CCCCL_EXST_YN": string,
+    "HS_GNRL_BUSNS_SC_NM": string,
+    "SPCLY_PURPS_HS_ORD_NM": null | string,
+    "ENE_BFE_SEHF_SC_NM": string,
+    "DGHT_SC_NM": string,
+    "FOND_YMD": string,
+    "FOAS_MEMRD": string,
+    "LOAD_DTM": string
+  }
+
+type SchoolInfoAPIDataSuccess = {
+    "schoolInfo": [
+      {
+        "head": [
+          {
+            "list_total_count": number
+          },
+          {
+            "RESULT": {
+              "CODE": string,
+              "MESSAGE": string
+            }
+          }
+        ]
+      },
+      {
+        "row": SchoolInfo[]
+      }
+    ]
+  }
+
 type APIDataFailure = {
     "RESULT": {
         "CODE": string,
@@ -45,19 +94,19 @@ type APIDataFailure = {
     }
 }
 
-type APIResponse = APIDataSuccess | APIDataFailure
+type APIResponse = MealMenuAPIDataSuccess | APIDataFailure
 
-type MealData = {
-    breakfast: string,
-    lunch: string,
-    dinner: string,
+export type MealData = {
+    breakfast: string[],
+    lunch: string[],
+    dinner: string[],
 }
 
 // getConfig() gets runtimeConfig values atptOfcdcScCode and sdSchulCode and return them
 export function getConfig() {
     const runtimeConfig = useRuntimeConfig()
-    let atptOfcdcScCode = runtimeConfig.public.AtptOfcdcScCode as string
-    let sdSchulCode = runtimeConfig.public.SdSchulCode as string
+    let atptOfcdcScCode = runtimeConfig.public.atptOfcdcScCode as string
+    let sdSchulCode = runtimeConfig.public.sdSchulCode as string
 
     if (import.meta.client) {
         const localAtptOfcdcScCode = localStorage.getItem('atptOfcdcScCode') || ''
@@ -84,20 +133,19 @@ export function setConfig(atptOfcdcScCodeValue: string, sdSchulCodeValue: string
 }
 
 // parseDDISH_NM() parses the raw DDISH_NM string
-export function parseDDISH_NM(ddishNmRaw: string) {
+export function parseDDISH_NM(ddishNmRaw: string): string[] {
     return ddishNmRaw
         .split('<br/>')
         .map((dish: string) => dish.split(' ')[0])
-        .join('\n')
+        .filter((item): item is string => Boolean(item))
 }
 
 // fetchMealData() fetches meal data from the API using the atptOfcdcScCode, sdSchulCode values and date and return parsed meal data
-export async function fetchMealData(atptOfcdcScCode: string, sdSchulCode: string, date: number): Promise<MealData> {
+export async function fetchMealData(atptOfcdcScCode: string, sdSchulCode: string, date: string): Promise<MealData> {
     const mealData = {
-        "breakfast": "No data available",
-        "lunch": "No data available",
-        "dinner": "No data available"
-    
+        "breakfast": ["Breakfast is not provided this day."],
+        "lunch": ["Lunch is not provided this day."],
+        "dinner": ["Dinner is not provided this day."]
     }
     try {
         const apidata = await $fetch<APIResponse>('https://open.neis.go.kr/hub/mealServiceDietInfo',
@@ -110,7 +158,7 @@ export async function fetchMealData(atptOfcdcScCode: string, sdSchulCode: string
                 }
             }
         )
-
+        
         if ('mealServiceDietInfo' in apidata) {
             const mealInfo = apidata.mealServiceDietInfo[1].row
             for (const info of mealInfo) {
@@ -130,12 +178,42 @@ export async function fetchMealData(atptOfcdcScCode: string, sdSchulCode: string
                 }
             }
         } else {
-            mealData.breakfast = "No data available"
-            mealData.lunch = "No data available"
-            mealData.dinner = "No data available"
+            mealData.breakfast = ["There is no meal information available."]
+            mealData.lunch = ["There is no meal information available."]
+            mealData.dinner = ["There is no meal information available."]
         }
     } catch (error) {
         console.error("Error fetching meal data:", error)
     }
     return mealData
+}
+
+export async function fetchSchoolDefaultInfo(lctnScNm: string, schulNm: string) {
+    try {
+        const apidata = await $fetch<SchoolInfoAPIDataSuccess>('https://open.neis.go.kr/hub/schoolInfo',
+            {
+                query: {
+                    LCTN_SC_NM: lctnScNm,
+                    SCHUL_NM: schulNm,
+                    TYPE: 'json'
+                }
+            }
+        )
+        if ('schoolInfo' in apidata) {
+            const schoolInfoArray = apidata.schoolInfo[1].row
+
+            if (schoolInfoArray.length !== 1) {
+                return "ERR_MULTIPLE_OR_NO_SCHOOLS"
+            }
+
+            const schoolInfo = schoolInfoArray[0]
+
+            if (schoolInfo) return schoolInfo
+        } else {
+            return "ERR_API_CALL_FAILED"
+        }
+    } catch (error) {
+        console.error("Error fetching school default info:", error)
+        return "ERR_API_CALL_FAILED"
+    }
 }
