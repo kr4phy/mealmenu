@@ -21,7 +21,7 @@ jobs:
         env:
           NUXT_PUBLIC_ATPT_OFCDC_SC_CODE: ${{ secrets.NUXT_PUBLIC_ATPT_OFCDC_SC_CODE }}
           NUXT_PUBLIC_SD_SCHUL_CODE: ${{ secrets.NUXT_PUBLIC_SD_SCHUL_CODE }}
-          NUXT_BASE_URL: /mealmenu/
+          NUXT_APP_BASE_URL: /mealmenu/
         run: |
           bunx nuxt build --preset github_pages
       - name: Upload artifact
