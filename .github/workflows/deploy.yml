@@ -7,9 +7,6 @@ on:
       - main
 jobs:
   build:
-    env:
-      NUXT_PUBLIC_ATPT_OFCDC_SC_CODE: ${{ secrets.NUXT_PUBLIC_ATPT_OFCDC_SC_CODE }}
-      NUXT_PUBLIC_SD_SCHUL_CODE: ${{ secrets.NUXT_PUBLIC_SD_SCHUL_CODE }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
@@ -21,7 +18,12 @@ jobs:
       - uses: oven-sh/setup-bun@v2
       - run: bun install
       - name: Build Nuxt
-        run: NUXT_APP_BASE_URL=/mealmenu/ bunx nuxt build --preset github_pages
+        env:
+          NUXT_PUBLIC_ATPT_OFCDC_SC_CODE: ${{ secrets.NUXT_PUBLIC_ATPT_OFCDC_SC_CODE }}
+          NUXT_PUBLIC_SD_SCHUL_CODE: ${{ secrets.NUXT_PUBLIC_SD_SCHUL_CODE }}
+          NUXT_APP_BASE_URL: /mealmenu/
+        run: |
+          bunx nuxt build --preset github_pages
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
