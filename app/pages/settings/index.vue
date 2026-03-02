@@ -12,6 +12,17 @@ const schoolNameState = reactive({
     schoolName: '',
 })
 
+if(import.meta.client) {
+    const config = {
+        atptOfcdcScCode: localStorage.getItem('atptOfcdcScCode') || '',
+        sdSchulCode: localStorage.getItem('sdSchulCode') || '',
+    }
+    if(config.atptOfcdcScCode && config.sdSchulCode) {
+        state.atptOfcdcScCode = config.atptOfcdcScCode
+        state.sdSchulCode = config.sdSchulCode
+    }
+}
+
 const toast = useToast()
 async function onSubmit() {
     toast.add({ title: 'Success', description: 'Settings saved.', color: 'success' })
