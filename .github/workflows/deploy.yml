@@ -17,7 +17,11 @@ jobs:
       # Pick your own package manager and build script
       - uses: oven-sh/setup-bun@v2
       - run: bun install
-      - run: NUXT_APP_BASE_URL=/mealmenu/ bunx nuxt build --preset github_pages
+      - name: Build Nuxt
+        run: NUXT_APP_BASE_URL=/mealmenu/ bunx nuxt build --preset github_pages
+        env:
+          NUXT_PUBLIC_ATPT_OFCDC_SC_CODE: ${{ secrets.NUXT_PUBLIC_ATPT_OFCDC_SC_CODE }}
+          NUXT_PUBLIC_SD_SCHUL_CODE: ${{ secrets.NUXT_PUBLIC_SD_SCHUL_CODE }}
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
