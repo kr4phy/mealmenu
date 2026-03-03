@@ -12,6 +12,11 @@ export default defineNuxtConfig({
   nitro: {
     preset: 'bun',
   },
+  icon: {
+    serverBundle: {
+      collections: ['lucide', 'heroicons']
+    }
+  },
   runtimeConfig: {
     public: {
       atptOfcdcScCode: '',

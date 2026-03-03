@@ -11,9 +11,9 @@ const items = computed<NavigationMenuItem[]>(() => [
     active: route.path === '/'
   },
   {
-    label: 'Meal Menu',
-    to: '/mealmenu',
-    active: route.path.startsWith('/mealmenu')
+    label: 'Selected Meal Menu',
+    to: '/selectedMealMenu',
+    active: route.path.startsWith('/selectedMealMenu')
   },
   {
     label: 'Settings',

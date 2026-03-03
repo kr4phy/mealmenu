@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { fetchSchoolDefaultInfo, setConfig } from '~/lib/apiHandler';
 
-
 const state = reactive({
     atptOfcdcScCode: '',
     sdSchulCode: '',
@@ -116,7 +115,7 @@ defineShortcuts({
                                                 <UInput v-model="schoolNameState.schoolName" />
                                             </UFormField>
                                             <UButton type="submit">
-                                                Find
+                                                Find <UKbd color="neutral" variant="outline">Enter</UKbd>
                                             </UButton>
                                         </UForm>
                                     </UContainer>
