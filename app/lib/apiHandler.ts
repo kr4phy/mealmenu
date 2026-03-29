@@ -160,7 +160,11 @@ export async function fetchMealData(atptOfcdcScCode: string, sdSchulCode: string
         )
         
         if ('mealServiceDietInfo' in apidata) {
-            const mealInfo = apidata.mealServiceDietInfo[1].row
+            const mealInfo = apidata.mealServiceDietInfo?.[1]?.row
+            if (!Array.isArray(mealInfo)) {
+                return mealData
+            }
+
             for (const info of mealInfo) {
                 const dishNm = parseDDISH_NM(info.DDISH_NM)
                 switch (info.MMEAL_SC_CODE) {
@@ -184,6 +188,9 @@ export async function fetchMealData(atptOfcdcScCode: string, sdSchulCode: string
         }
     } catch (error) {
         console.error("Error fetching meal data:", error)
+        mealData.breakfast = ["Failed to fetch meal information."]
+        mealData.lunch = ["Failed to fetch meal information."]
+        mealData.dinner = ["Failed to fetch meal information."]
     }
     return mealData
 }

@@ -29,31 +29,53 @@ async function onSubmit() {
 }
 
 async function handleFindSchool() {
-    const schoolInfo = await fetchSchoolDefaultInfo(schoolNameState.cityProvince, schoolNameState.schoolName)
-    if (typeof schoolInfo === 'string') {
-        if (schoolInfo === "ERR_MULTIPLE_OR_NO_SCHOOLS") {
+    const result = await fetchSchoolDefaultInfo(schoolNameState.cityProvince, schoolNameState.schoolName)
+    if (typeof result === 'string') {
+        if (result === 'ERR_MULTIPLE_OR_NO_SCHOOLS') {
             toast.add({ title: 'Error', description: 'Multiple or no schools found. Please provide more specific input.', color: 'error' })
-        } else if (schoolInfo === "ERR_API_CALL_FAILED") {
+        } else {
             toast.add({ title: 'Error', description: 'Failed to fetch school info. Try again later.', color: 'error' })
         }
-    } else if (typeof schoolInfo === 'undefined') {
-        toast.add({ title: 'Error', description: 'Error retrieving school information. Try again later.', color: 'error' })
-    } else {
-        state.atptOfcdcScCode = schoolInfo.ATPT_OFCDC_SC_CODE
-        state.sdSchulCode = schoolInfo.SD_SCHUL_CODE
-        schoolNameState.cityProvince = schoolInfo.LCTN_SC_NM
-        schoolNameState.schoolName = schoolInfo.SCHUL_NM
+        open.value = false
+        return
     }
+
+    if (!result) {
+        toast.add({ title: 'Error', description: 'Error retrieving school information. Try again later.', color: 'error' })
+        open.value = false
+        return
+    }
+
+    state.atptOfcdcScCode = result.ATPT_OFCDC_SC_CODE
+    state.sdSchulCode = result.SD_SCHUL_CODE
+    schoolNameState.cityProvince = result.LCTN_SC_NM
+    schoolNameState.schoolName = result.SCHUL_NM
     open.value = false
 }
 
 const open = ref(false)
 
+function isTypingTarget(target: EventTarget | null): boolean {
+    if (!import.meta.client || !(target instanceof HTMLElement)) {
+        return false
+    }
+
+    return target.isContentEditable || ['INPUT', 'TEXTAREA', 'SELECT'].includes(target.tagName)
+}
+
 defineShortcuts({
-    f: () => {
+    f: (event: KeyboardEvent) => {
+        if (isTypingTarget(event.target)) {
+            return
+        }
+
         open.value = !open.value
     },
-    s: () => {
+    s: (event: KeyboardEvent) => {
+        if (isTypingTarget(event.target)) {
+            return
+        }
+
         onSubmit()
     }
 })
