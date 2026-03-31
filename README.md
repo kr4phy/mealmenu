@@ -4,6 +4,8 @@ A Nuxt 4 web app for viewing school meal menus by date.
 
 This project fetches meal data from the NEIS Open API and displays it in tabbed views (Breakfast, Lunch, Dinner).
 
+IMPORTANT NOTICE: This app uses South Korea’s NEIS OpenAPI, so it only supports schools located in South Korea. When you use Find School feature for test, try with following values: “경상남도” for City/Province and “삼천포고등학교” for school name. It is also default set in demo website.
+
 ## Features
 
 - View today's meal menu on the home page.
