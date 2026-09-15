@@ -2,9 +2,9 @@
 import { CalendarDate } from '@internationalized/date'
 
 const crtDate = new Date()
-const maxDate = new CalendarDate(crtDate.getFullYear() + 1, crtDate.getMonth() + 1, crtDate.getDate())
-const selectedDate = shallowRef(new CalendarDate(crtDate.getFullYear(), crtDate.getMonth() + 1, crtDate.getDate()))
-const dateValue = shallowRef(new CalendarDate(crtDate.getFullYear(), crtDate.getMonth() + 1, crtDate.getDate()))
+const maxDate: any = new CalendarDate(crtDate.getFullYear() + 1, crtDate.getMonth() + 1, crtDate.getDate())
+const selectedDate = shallowRef<any>(new CalendarDate(crtDate.getFullYear(), crtDate.getMonth() + 1, crtDate.getDate()))
+const dateValue = shallowRef<any>(new CalendarDate(crtDate.getFullYear(), crtDate.getMonth() + 1, crtDate.getDate()))
 </script>
 
 <template>
