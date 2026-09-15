@@ -4,15 +4,18 @@ import { ALLERGENS, fetchSchoolDefaultInfo, getAllergenConfig, setAllergenConfig
 const state = reactive({ atptOfcdcScCode: '', sdSchulCode: '' })
 const schoolNameState = reactive({ cityProvince: '', schoolName: '' })
 const selectedAllergens = ref<number[]>([])
+const allergenSelections = reactive<Record<number, boolean>>({})
 
 if (import.meta.client) {
     state.atptOfcdcScCode = localStorage.getItem('atptOfcdcScCode') || ''
     state.sdSchulCode = localStorage.getItem('sdSchulCode') || ''
     selectedAllergens.value = getAllergenConfig()
+    for (const allergen of ALLERGENS) allergenSelections[allergen.code] = selectedAllergens.value.includes(allergen.code)
 }
 
 const toast = useToast()
 async function onSubmit() {
+    selectedAllergens.value = ALLERGENS.filter((allergen) => allergenSelections[allergen.code]).map((allergen) => allergen.code)
     setConfig(state.atptOfcdcScCode, state.sdSchulCode)
     setAllergenConfig(selectedAllergens.value)
     toast.add({ title: 'Success', description: 'Settings saved.', color: 'success' })
@@ -77,8 +80,7 @@ defineShortcuts({
                                 <UCheckbox
                                     v-for="allergen in ALLERGENS"
                                     :key="allergen.code"
-                                    v-model="selectedAllergens"
-                                    :value="allergen.code"
+                                    v-model="allergenSelections[allergen.code]"
                                     :label="`${allergen.code}. ${allergen.name}`"
                                 />
                             </div>

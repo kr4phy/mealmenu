@@ -6,7 +6,7 @@ const router = useRouter()
 const queryDate = route.query.date as string | undefined
 
 const crtDate = new Date()
-const dateValue = shallowRef(new CalendarDate(crtDate.getFullYear(), crtDate.getMonth() + 1, crtDate.getDate()))
+const dateValue = shallowRef<any>(new CalendarDate(crtDate.getFullYear(), crtDate.getMonth() + 1, crtDate.getDate()))
 
 if (typeof queryDate === 'string') {
     const [year, month, day] = queryDate.split('-').map(Number)
@@ -15,7 +15,7 @@ if (typeof queryDate === 'string') {
     }
 }
 
-const maxDate = new CalendarDate(dateValue.value.year + 1, dateValue.value.month, dateValue.value.day)
+const maxDate: any = new CalendarDate(dateValue.value.year + 1, dateValue.value.month, dateValue.value.day)
 
 watch(dateValue, (newDate) => {
     const { year, month, day } = newDate
