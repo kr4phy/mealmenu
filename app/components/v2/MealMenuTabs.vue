@@ -23,6 +23,7 @@ const loadMenu = async () => {
 }
 const warnings = (dish: V2Dish) => dish.allergens.filter((code) => selectedAllergens.value.includes(code))
 const label = (code: number) => `${code}. ${allergenName(code, getAllergenName(code))}`
+const allergensFor = (key: keyof V2MealData) => [...new Set(mealMenu.value[key].flatMap((dish) => dish.allergens))].sort((a, b) => a - b)
 const hasPreferences = computed(() => selectedAllergens.value.length > 0)
 
 onMounted(loadMenu)
@@ -43,6 +44,17 @@ watch(() => props.date, loadMenu)
                     </UCard>
                 </div>
                 <UAlert v-else color="neutral" variant="subtle" :description="t('noMenu')" />
+                <hr class="my-5 border-default" />
+                <div>
+                    <p class="mb-3 text-sm font-semibold text-highlighted">{{ t('allergenInfo') }}</p>
+                    <div v-if="allergensFor(section.key).length" class="flex flex-wrap gap-2">
+                        <UBadge v-for="code in allergensFor(section.key)" :key="code" :color="selectedAllergens.includes(code) ? 'error' : 'neutral'" variant="subtle">
+                            <UIcon v-if="selectedAllergens.includes(code)" name="i-lucide-alert-triangle" class="size-3.5" />
+                            {{ label(code) }}
+                        </UBadge>
+                    </div>
+                    <p v-else class="text-sm text-muted">{{ t('noAllergenInfo') }}</p>
+                </div>
             </UCard>
         </div>
         <p class="text-xs text-muted">{{ t('allergyDisclaimer') }}</p>

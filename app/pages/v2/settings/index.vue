@@ -36,6 +36,20 @@ const findSchool = async () => {
     school.schoolName = result.SCHUL_NM
     open.value = false
 }
+
+const isTypingTarget = (target: EventTarget | null): boolean => {
+    if (!import.meta.client || !(target instanceof HTMLElement)) return false
+    return target.isContentEditable || ['INPUT', 'TEXTAREA', 'SELECT'].includes(target.tagName)
+}
+
+defineShortcuts({
+    f: (event: KeyboardEvent) => {
+        if (!isTypingTarget(event.target)) open.value = !open.value
+    },
+    s: (event: KeyboardEvent) => {
+        if (!isTypingTarget(event.target)) save()
+    },
+})
 </script>
 
 <template>
@@ -44,10 +58,10 @@ const findSchool = async () => {
             <section class="pt-8"><p class="text-sm font-semibold uppercase tracking-[0.2em] text-primary">{{ t('personalized') }}</p><h1 class="mt-2 text-3xl font-black tracking-tight text-highlighted">{{ t('personalizedTitle') }}</h1><p class="mt-2 text-muted">{{ t('personalizedDescription') }}</p></section>
             <UPageBody>
                 <UCard>
-                    <div class="flex flex-col gap-5 sm:flex-row sm:items-end"><UFormField :label="t('educationCode')"><UInput v-model="state.atptOfcdcScCode" disabled /></UFormField><UFormField :label="t('schoolCode')"><UInput v-model="state.sdSchulCode" disabled /></UFormField><UModal v-model:open="open"><UButton color="neutral" variant="outline">{{ t('findSchool') }}</UButton><template #title>{{ t('findSchoolTitle') }}</template><template #body><UForm :state="school" class="space-y-4" @submit="findSchool"><UFormField :label="t('province')"><UInput v-model="school.cityProvince" /></UFormField><UFormField :label="t('schoolName')"><UInput v-model="school.schoolName" /></UFormField><UButton type="submit">{{ t('search') }}</UButton></UForm></template></UModal></div>
+                    <div class="flex flex-col gap-5 sm:flex-row sm:items-end"><UFormField :label="t('educationCode')"><UInput v-model="state.atptOfcdcScCode" disabled /></UFormField><UFormField :label="t('schoolCode')"><UInput v-model="state.sdSchulCode" disabled /></UFormField><UModal v-model:open="open"><UButton color="neutral" variant="outline">{{ t('findSchool') }} <UKbd color="neutral" variant="subtle">F</UKbd></UButton><template #title>{{ t('findSchoolTitle') }}</template><template #body><UForm :state="school" class="space-y-4" @submit="findSchool"><UFormField :label="t('province')"><UInput v-model="school.cityProvince" /></UFormField><UFormField :label="t('schoolName')"><UInput v-model="school.schoolName" /></UFormField><UButton type="submit">{{ t('search') }} <UKbd color="neutral" variant="outline">Enter</UKbd></UButton></UForm></template></UModal></div>
                     <USeparator class="my-8" />
                     <div><h2 class="text-lg font-bold text-highlighted">{{ t('allergiesToAvoid') }}</h2><p class="mt-1 text-sm text-muted">{{ t('allergyDescription') }}</p><div class="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-3"><UCheckbox v-for="item in ALLERGENS" :key="item.code" v-model="selections[item.code]" :label="`${item.code}. ${allergenName(item.code, item.name)}`" /></div></div>
-                    <div class="mt-8 flex justify-end"><UButton size="lg" icon="i-lucide-check" @click="save">{{ t('save') }}</UButton></div>
+                    <div class="mt-8 flex justify-end"><UButton size="lg" icon="i-lucide-check" @click="save">{{ t('save') }} <UKbd color="neutral" variant="outline">S</UKbd></UButton></div>
                 </UCard>
             </UPageBody>
         </UContainer>
