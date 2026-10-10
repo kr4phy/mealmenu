@@ -2,10 +2,11 @@
 import type { NavigationMenuItem } from '@nuxt/ui'
 import Logo from '~/components/logo.vue'
 const route = useRoute()
+const { locale, t, toggleLocale } = useV2Locale()
 const items = computed<NavigationMenuItem[]>(() => [
-    { label: '오늘 급식', to: '/v2', active: route.path === '/v2' },
-    { label: '날짜별 메뉴', to: '/v2/selectedMealMenu', active: route.path.startsWith('/v2/selectedMealMenu') },
-    { label: '설정', to: '/v2/settings', active: route.path.startsWith('/v2/settings') },
+    { label: t('today'), to: '/v2', active: route.path === '/v2' },
+    { label: t('dateMenu'), to: '/v2/selectedMealMenu', active: route.path.startsWith('/v2/selectedMealMenu') },
+    { label: t('settings'), to: '/v2/settings', active: route.path.startsWith('/v2/settings') },
 ])
 </script>
 <template>
@@ -13,9 +14,10 @@ const items = computed<NavigationMenuItem[]>(() => [
         <template #title><Logo class="h-6 w-auto" /></template>
         <UNavigationMenu :items="items" />
         <template #right>
-            <UBadge color="primary" variant="subtle" class="hidden sm:inline-flex">v2 Preview</UBadge>
+            <UBadge color="primary" variant="subtle" class="hidden sm:inline-flex">{{ t('preview') }}</UBadge>
+            <UButton color="neutral" variant="outline" size="sm" :aria-label="locale === 'ko' ? 'Switch to English' : '한국어로 전환'" @click="toggleLocale">{{ locale === 'ko' ? 'EN' : '한국어' }}</UButton>
             <UColorModeButton />
-            <UTooltip text="Open on GitHub"><UButton color="neutral" variant="ghost" to="https://github.com/kr4phy/mealmenu" target="_blank" icon="i-simple-icons-github" aria-label="GitHub" /></UTooltip>
+            <UTooltip :text="t('openGithub')"><UButton color="neutral" variant="ghost" to="https://github.com/kr4phy/mealmenu" target="_blank" icon="i-simple-icons-github" aria-label="GitHub" /></UTooltip>
         </template>
         <template #body><UNavigationMenu :items="items" orientation="vertical" /></template>
     </UHeader>

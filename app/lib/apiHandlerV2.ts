@@ -11,6 +11,10 @@ export type V2MealData = {
     dinner: V2Dish[]
 }
 
+type V2MealApiResponse = {
+    mealServiceDietInfo?: [{ head?: unknown[] }, { row?: Array<{ DDISH_NM?: string; MMEAL_SC_CODE?: string }> }]
+}
+
 export const ALLERGENS = [
     { code: 1, name: '난류(계란)' }, { code: 2, name: '우유' }, { code: 3, name: '메밀' },
     { code: 4, name: '땅콩' }, { code: 5, name: '대두' }, { code: 6, name: '밀' },
@@ -45,7 +49,7 @@ export const fetchV2MealData = async (date: string): Promise<V2MealData> => {
     const { atptOfcdcScCode, sdSchulCode } = getConfig()
     const empty = { breakfast: [], lunch: [], dinner: [] } as V2MealData
     try {
-        const response = await $fetch<any>('https://open.neis.go.kr/hub/mealServiceDietInfo', {
+        const response = await $fetch<V2MealApiResponse>('https://open.neis.go.kr/hub/mealServiceDietInfo', {
             query: { ATPT_OFCDC_SC_CODE: atptOfcdcScCode, SD_SCHUL_CODE: sdSchulCode, MLSV_YMD: date, TYPE: 'json' },
         })
         const rows = response?.mealServiceDietInfo?.[1]?.row
