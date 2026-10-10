@@ -2,7 +2,6 @@
 import Header from './components/header.vue'
 import LegacyHeader from './components/legacyHeader.vue'
 import V2Header from './components/v2/Header.vue'
-import './assets/css/v2.css'
 
 const route = useRoute()
 const isV1 = computed(() => route.path === '/v1' || route.path.startsWith('/v1/'))
