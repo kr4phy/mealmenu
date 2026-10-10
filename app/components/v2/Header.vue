@@ -10,12 +10,12 @@ const items = computed<NavigationMenuItem[]>(() => [
 ])
 </script>
 <template>
-    <UHeader class="border-b border-gray-200/70 bg-white/80 backdrop-blur">
+    <UHeader>
         <template #title><Logo class="h-6 w-auto" /></template>
         <UNavigationMenu :items="items" />
         <template #right>
             <UBadge color="primary" variant="subtle" class="hidden sm:inline-flex">{{ t('preview') }}</UBadge>
-            <UButton color="neutral" variant="outline" size="sm" :aria-label="locale === 'ko' ? 'Switch to English' : '한국어로 전환'" @click="toggleLocale">{{ locale === 'ko' ? 'EN' : '한국어' }}</UButton>
+            <UButton color="neutral" variant="outline" size="sm" :aria-label="locale === 'ko' ? 'Switch to English' : '한국어로 전환'" @click="toggleLocale">{{ locale === 'ko' ? '한국어' : 'English' }}</UButton>
             <UColorModeButton />
             <UTooltip :text="t('openGithub')"><UButton color="neutral" variant="ghost" to="https://github.com/kr4phy/mealmenu" target="_blank" icon="i-simple-icons-github" aria-label="GitHub" /></UTooltip>
         </template>

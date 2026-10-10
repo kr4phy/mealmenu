@@ -1,4 +1,0 @@
-.v2-page { background: linear-gradient(180deg, #f8fafc 0%, #ffffff 420px); min-height: calc(100vh - 64px); }
-.v2-page button, .v2-page a { transition: transform 160ms ease, box-shadow 160ms ease, background-color 160ms ease; }
-.v2-page button:active, .v2-page a:active { transform: scale(.98); }
-@media (prefers-reduced-motion: reduce) { .v2-page button, .v2-page a { transition: none; } }
