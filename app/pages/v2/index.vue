@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import MealMenuTabs from '~/components/v2/MealMenuTabs.vue'
 import { CalendarDate } from '@internationalized/date'
 const today = new Date()
 const { t } = useV2Locale()
