@@ -28,7 +28,10 @@ const allergensFor = (key: keyof V2MealData) => [...new Set(menuFor(key).flatMap
 const isSelected = (code: number) => selectedAllergens.value.includes(code)
 
 onMounted(loadMenu)
-watch(() => props.date, loadMenu)
+watch(() => props.date, () => {
+    loadMenu()
+    useHead({ title: `MealMenu · ${props.date.slice(0, 4)}. ${props.date.slice(4, 6)}. ${props.date.slice(6, 8)}.` })
+})
 </script>
 
 <template>
@@ -38,34 +41,82 @@ watch(() => props.date, loadMenu)
             <template #breakfast>
                 <UPageCard :title="t('breakfast')">
                     <div v-if="menuFor('breakfast').length" class="space-y-2">
-                        <div v-for="(dish, index) in menuFor('breakfast')" :key="`${dish.name}-${index}`" class="flex flex-wrap items-center gap-2">
+                        <div v-for="(dish, index) in menuFor('breakfast')" :key="`${dish.name}-${index}`"
+                            class="flex flex-wrap items-center gap-2">
                             <span class="text-highlighted">{{ dish.name }}</span>
-                            <UBadge v-for="code in dish.allergens" :key="code" :color="isSelected(code) ? 'error' : 'neutral'" variant="subtle" size="xs">{{ code }}</UBadge>
+                            <UBadge v-for="code in dish.allergens" :key="code"
+                                :color="isSelected(code) ? 'error' : 'neutral'" variant="subtle" size="xs">{{ code }}
+                            </UBadge>
                         </div>
                     </div>
                     <UAlert v-else color="neutral" variant="subtle" :description="t('noMenu')" />
                     <hr class="my-5 border-default" />
-                    <div class="space-y-2"><p class="text-sm font-semibold text-highlighted">{{ t('allergenInfo') }}</p><div v-if="allergensFor('breakfast').length" class="space-y-1"><div v-for="code in allergensFor('breakfast')" :key="code" class="flex items-center gap-2 text-sm" :class="isSelected(code) ? 'text-error font-semibold' : 'text-muted'"><UIcon v-if="isSelected(code)" name="i-lucide-alert-triangle" class="size-4" /><span>{{ label(code) }}</span></div></div><p v-else class="text-sm text-muted">{{ t('noAllergenInfo') }}</p></div>
+                    <div class="space-y-2">
+                        <p class="text-sm font-semibold text-highlighted">{{ t('allergenInfo') }}</p>
+                        <div v-if="allergensFor('breakfast').length" class="space-y-1">
+                            <div v-for="code in allergensFor('breakfast')" :key="code"
+                                class="flex items-center gap-2 text-sm"
+                                :class="isSelected(code) ? 'text-error font-semibold' : 'text-muted'">
+                                <span>{{ label(code) }}</span>
+                                <UIcon v-if="isSelected(code)" name="i-lucide-alert-triangle" class="size-4" />
+                            </div>
+                        </div>
+                        <p v-else class="text-sm text-muted">{{ t('noAllergenInfo') }}</p>
+                    </div>
                 </UPageCard>
             </template>
             <template #lunch>
                 <UPageCard :title="t('lunch')">
                     <div v-if="menuFor('lunch').length" class="space-y-2">
-                        <div v-for="(dish, index) in menuFor('lunch')" :key="`${dish.name}-${index}`" class="flex flex-wrap items-center gap-2"><span class="text-highlighted">{{ dish.name }}</span><UBadge v-for="code in dish.allergens" :key="code" :color="isSelected(code) ? 'error' : 'neutral'" variant="subtle" size="xs">{{ code }}</UBadge></div>
+                        <div v-for="(dish, index) in menuFor('lunch')" :key="`${dish.name}-${index}`"
+                            class="flex flex-wrap items-center gap-2"><span class="text-highlighted">{{ dish.name
+                                }}</span>
+                            <UBadge v-for="code in dish.allergens" :key="code"
+                                :color="isSelected(code) ? 'error' : 'neutral'" variant="subtle" size="xs">{{ code }}
+                            </UBadge>
+                        </div>
                     </div>
                     <UAlert v-else color="neutral" variant="subtle" :description="t('noMenu')" />
                     <hr class="my-5 border-default" />
-                    <div class="space-y-2"><p class="text-sm font-semibold text-highlighted">{{ t('allergenInfo') }}</p><div v-if="allergensFor('lunch').length" class="space-y-1"><div v-for="code in allergensFor('lunch')" :key="code" class="flex items-center gap-2 text-sm" :class="isSelected(code) ? 'text-error font-semibold' : 'text-muted'"><UIcon v-if="isSelected(code)" name="i-lucide-alert-triangle" class="size-4" /><span>{{ label(code) }}</span></div></div><p v-else class="text-sm text-muted">{{ t('noAllergenInfo') }}</p></div>
+                    <div class="space-y-2">
+                        <p class="text-sm font-semibold text-highlighted">{{ t('allergenInfo') }}</p>
+                        <div v-if="allergensFor('lunch').length" class="space-y-1">
+                            <div v-for="code in allergensFor('lunch')" :key="code"
+                                class="flex items-center gap-2 text-sm"
+                                :class="isSelected(code) ? 'text-error font-semibold' : 'text-muted'">
+                                <span>{{ label(code) }}</span>
+                                <UIcon v-if="isSelected(code)" name="i-lucide-alert-triangle" class="size-4" />
+                            </div>
+                        </div>
+                        <p v-else class="text-sm text-muted">{{ t('noAllergenInfo') }}</p>
+                    </div>
                 </UPageCard>
             </template>
             <template #dinner>
                 <UPageCard :title="t('dinner')">
                     <div v-if="menuFor('dinner').length" class="space-y-2">
-                        <div v-for="(dish, index) in menuFor('dinner')" :key="`${dish.name}-${index}`" class="flex flex-wrap items-center gap-2"><span class="text-highlighted">{{ dish.name }}</span><UBadge v-for="code in dish.allergens" :key="code" :color="isSelected(code) ? 'error' : 'neutral'" variant="subtle" size="xs">{{ code }}</UBadge></div>
+                        <div v-for="(dish, index) in menuFor('dinner')" :key="`${dish.name}-${index}`"
+                            class="flex flex-wrap items-center gap-2"><span class="text-highlighted">{{ dish.name
+                                }}</span>
+                            <UBadge v-for="code in dish.allergens" :key="code"
+                                :color="isSelected(code) ? 'error' : 'neutral'" variant="subtle" size="xs">{{ code }}
+                            </UBadge>
+                        </div>
                     </div>
                     <UAlert v-else color="neutral" variant="subtle" :description="t('noMenu')" />
                     <hr class="my-5 border-default" />
-                    <div class="space-y-2"><p class="text-sm font-semibold text-highlighted">{{ t('allergenInfo') }}</p><div v-if="allergensFor('dinner').length" class="space-y-1"><div v-for="code in allergensFor('dinner')" :key="code" class="flex items-center gap-2 text-sm" :class="isSelected(code) ? 'text-error font-semibold' : 'text-muted'"><UIcon v-if="isSelected(code)" name="i-lucide-alert-triangle" class="size-4" /><span>{{ label(code) }}</span></div></div><p v-else class="text-sm text-muted">{{ t('noAllergenInfo') }}</p></div>
+                    <div class="space-y-2">
+                        <p class="text-sm font-semibold text-highlighted">{{ t('allergenInfo') }}</p>
+                        <div v-if="allergensFor('dinner').length" class="space-y-1">
+                            <div v-for="code in allergensFor('dinner')" :key="code"
+                                class="flex items-center gap-2 text-sm"
+                                :class="isSelected(code) ? 'text-error font-semibold' : 'text-muted'">
+                                <span>{{ label(code) }}</span>
+                                <UIcon v-if="isSelected(code)" name="i-lucide-alert-triangle" class="size-4" />
+                            </div>
+                        </div>
+                        <p v-else class="text-sm text-muted">{{ t('noAllergenInfo') }}</p>
+                    </div>
                 </UPageCard>
             </template>
         </UTabs>
