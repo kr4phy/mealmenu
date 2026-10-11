@@ -25,7 +25,7 @@ jobs:
           NUXT_APP_BASE_URL: /mealmenu/
           NITRO_PRESET: github_pages
         run: |
-          bunx nuxt build
+          bunx nuxt build --preset github_pages
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
