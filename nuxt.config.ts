@@ -13,8 +13,9 @@ export default defineNuxtConfig({
     preset: 'bun',
   },
   icon: {
-    serverBundle: {
-      collections: ['lucide', 'heroicons']
+    serverBundle: false,
+    clientBundle: {
+      scan: true,
     }
   },
   runtimeConfig: {

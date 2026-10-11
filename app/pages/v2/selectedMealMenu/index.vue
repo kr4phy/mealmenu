@@ -4,8 +4,16 @@ import { CalendarDate } from '@internationalized/date'
 const route = useRoute(); const router = useRouter(); const today = new Date()
 const { t } = useV2Locale()
 const queryDate = route.query.date as string | undefined
-const dateValue = shallowRef(new CalendarDate(today.getFullYear(), today.getMonth() + 1, today.getDate()))
-if (queryDate) { const [year, month, day] = queryDate.split('-').map(Number); if (year && month && day) dateValue.value = new CalendarDate(year, month, day) }
+const dateValue = shallowRef(
+    queryDate
+    ? (() => {
+        const [year, month, day] = queryDate.split('-').map(Number)
+        return (year && month && day)
+        ? new CalendarDate(year, month, day)
+        : new CalendarDate(today.getFullYear(), today.getMonth() + 1, today.getDate())
+    })()
+    : new CalendarDate(today.getFullYear(), today.getMonth() + 1, today.getDate())
+)
 watch(dateValue, (value) => router.push({ query: { date: `${value.year}-${value.month}-${value.day}` } }))
 const dateLabel = computed(() => `${dateValue.value.year}. ${String(dateValue.value.month).padStart(2, '0')}. ${String(dateValue.value.day).padStart(2, '0')}.`)
 const dateKey = computed(() => `${dateValue.value.year}${String(dateValue.value.month).padStart(2, '0')}${String(dateValue.value.day).padStart(2, '0')}`)
